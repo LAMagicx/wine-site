@@ -9,8 +9,9 @@ from pydantic import BaseModel
 from pymongo import MongoClient
 from uuid import uuid4, UUID
 from datetime import datetime, timedelta
-import random
+import random, json
 from model import Model
+import pandas as pd
 
 ## Settings
 
@@ -42,10 +43,6 @@ MODEL = Model("model/data.csv")
 
 ## Routes
 
-@app.get("/")
-async def read_root(request: Request):
-    return templates.TemplateResponse("landing.html", {"request": request})
-
 @app.post("/api/predict")
 def predict_grade(wine: Wine) -> List[float]:
     return MODEL.predict(wine)
@@ -61,13 +58,17 @@ def get_serialized():
 
 @app.get("/api/model/description")
 def get_model_info():
-    return info
+    return "Kill me"
 
 @app.put("/api/model")
 def add_entry(wine: Wine):
-    # Add the wine to the catalog
-    wine
+    s = ','.join([str(x) for x in list(json.loads(wine.json()).values())])
+    lines = open("model/data.csv", "r").readlines()
+    print(lines[-1].split(",")[-1])
+    last_id = int(lines[-1].split(",")[-1])
+    lines.append(s + "," + str(last_id + 1))
+    open("model/data.csv", "w").writelines(lines)
 
 @app.post("/api/model/retrain")
 def retrain_model():
-    doTheThingWithModelPy
+    MODEL.train("model/data.csv")

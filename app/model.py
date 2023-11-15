@@ -8,6 +8,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
 
+def load_data(path):
+    data = pd.read_csv(path)
+    features = data.drop(["quality", "Id"], axis=1)
+    target = data["quality"]
+    return train_test_split(features, target, test_size=0.2, random_state=42)
+
+
 class Model:
 
     def __init__(self, data_path):
@@ -28,7 +35,8 @@ class Model:
         # Compile the model
         self.model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 
-    def train(self, X_train, y_train):
+    def train(self, path):
+        X_train, X_test, y_train, y_test = load_data(path)
         X_train_scaled = self.scaler.transform(X_train)
         # Train the model
         history = self.model.fit(X_train_scaled, y_train, epochs=50, batch_size=2, validation_split=0.2)
