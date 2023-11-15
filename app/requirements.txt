@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pymongo
+pydantic
+jinja2
+typing
+python-multipart
+fastapi-sessions
