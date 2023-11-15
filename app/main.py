@@ -51,26 +51,26 @@ async def read_root(request: Request):
     return templates.TemplateResponse("landing.html", {"request": request})
 
 @app.post("/api/predict")
-def predictGrade(wine: Wine):
+def predict_grade(wine: Wine):
     return 0 #GRADE PREDICTED
 
 @app.get("/api/predict")
-def getPerfectWine() :
+def get_perfect_wine() :
     return Wine #In type WINE
 
 @app.get("/api/model")
-def getSerialized():
+def get_serialized():
     return model #Euhh idk
 
 @app.get("/api/model/description")
-def getModelInfo():
+def get_model_info():
     return info
 
 @app.put("/api/model")
-def addEntry(wine: Wine):
+def add_entry(wine: Wine):
     #Add the wine to the catalog
     wine
     
 @app.post("/api/model/retrain")
-def retrainModel():
+def retrain_model():
     doTheThingWithModelPy
