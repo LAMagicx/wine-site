@@ -66,7 +66,7 @@ def add_entry(wine: Wine):
     lines = open("model/data.csv", "r").readlines()
     print(lines[-1].split(",")[-1])
     last_id = int(lines[-1].split(",")[-1])
-    lines.append(s + "," + str(last_id + 1))
+    lines.append(s + "," + str(last_id + 1) + "\n")
     open("model/data.csv", "w").writelines(lines)
 
 @app.post("/api/model/retrain")
