@@ -4,7 +4,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from typing import Annotated, Union
+from typing import Annotated, Union, Dict
 from pydantic import BaseModel
 from pymongo import MongoClient
 from uuid import uuid4, UUID
@@ -20,6 +20,28 @@ app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 # MongoDB connection
 mongo_client = MongoClient("mongodb://root:pass@mongo:27017/?authMechanism=DEFAULT")
 
+## Classes
+
+class Wine(BaseModel):
+    fixed_acidity:float
+    volatile_acidity:float
+    citric_acid : float
+    residual_sugar : float
+    chlorides : float
+    free_sulfur_dioxide : int
+    total_sulfur_dioxide : int
+    density : float
+    ph : float
+    sulphates : float
+    alcohol : float
+    quality : int
+    id : int
+    
+class Model(BaseModel):
+    parameters : str
+    metrics : str
+    others : str
+
 ## Functions
 
 ## Routes
@@ -27,3 +49,28 @@ mongo_client = MongoClient("mongodb://root:pass@mongo:27017/?authMechanism=DEFAU
 @app.get("/")
 async def read_root(request: Request):
     return templates.TemplateResponse("landing.html", {"request": request})
+
+@app.post("/api/predict")
+def predictGrade(wine: Wine):
+    return 0 #GRADE PREDICTED
+
+@app.get("/api/predict")
+def getPerfectWine() :
+    return Wine #In type WINE
+
+@app.get("/api/model")
+def getSerialized():
+    return model #Euhh idk
+
+@app.get("/api/model/description")
+def getModelInfo():
+    return info
+
+@app.put("/api/model")
+def addEntry(wine: Wine):
+    #Add the wine to the catalog
+    wine
+    
+@app.post("/api/model/retrain")
+def retrainModel():
+    doTheThingWithModelPy
