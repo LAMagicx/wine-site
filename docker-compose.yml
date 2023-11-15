@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mongo:
     image: mongo
-    container_name: mongo
+    container_name: monga-wine-db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: pass
@@ -12,6 +12,7 @@ services:
     networks:
       - app_network
   app:
+    container_name: wine-fastapi-app
     build: app/
     ports:
       - "8000:8000"

@@ -5,4 +5,7 @@ pydantic
 jinja2
 typing
 python-multipart
-fastapi-sessions
+numpy
+scikit-learn
+tensorflow
+pandas
