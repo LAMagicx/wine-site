@@ -10,6 +10,7 @@ from pymongo import MongoClient
 from uuid import uuid4, UUID
 from datetime import datetime, timedelta
 import random
+from model.model import Model
 
 ## Settings
 
@@ -37,12 +38,8 @@ class Wine(BaseModel):
     quality : int
     id : int
 
-class Model(BaseModel):
-    parameters : str
-    metrics : str
-    others : str
 
-## Functions
+MODEL = Model("model/data.csv")
 
 ## Routes
 
@@ -60,7 +57,8 @@ def get_perfect_wine() :
 
 @app.get("/api/model")
 def get_serialized():
-    return model  # Euhh idk
+    model_json = MODEL.to_json()
+    return model_json
 
 @app.get("/api/model/description")
 def get_model_info():

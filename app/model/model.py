@@ -45,3 +45,8 @@ class Model:
         # behold the magic
         print(wine)
         return self.model.predict(np.array([wine]))
+
+    def to_json(self):
+        model_config = self.model.get_config()
+        model_weights = [w.tolist() for w in self.model.get_weights()]
+        return json.dumps({'config': model_config, 'weights': model_weights})
