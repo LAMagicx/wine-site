@@ -10,7 +10,7 @@ from pymongo import MongoClient
 from uuid import uuid4, UUID
 from datetime import datetime, timedelta
 import random
-from model.model import Model
+from model import Model
 
 ## Settings
 

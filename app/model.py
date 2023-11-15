@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 import numpy as np
 import pandas as pd
+import json
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
@@ -10,7 +11,7 @@ from sklearn.model_selection import RandomizedSearchCV
 class Model:
 
     def __init__(self, data_path):
-        self.data = pd.read_csv("data.csv")
+        self.data = pd.read_csv(data_path)
         features = self.data.drop(["quality", "Id"], axis=1)
         target = self.data["quality"]
         X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
