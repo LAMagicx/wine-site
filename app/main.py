@@ -18,13 +18,13 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
 # MongoDB connection
-mongo_client = MongoClient("mongodb://root:pass@mongo:27017/?authMechanism=DEFAULT")
+# mongo_client = MongoClient("mongodb://root:pass@mongo:27017/?authMechanism=DEFAULT")
 
 ## Classes
 
 class Wine(BaseModel):
-    fixed_acidity:float
-    volatile_acidity:float
+    fixed_acidity: float
+    volatile_acidity: float
     citric_acid : float
     residual_sugar : float
     chlorides : float
@@ -36,7 +36,7 @@ class Wine(BaseModel):
     alcohol : float
     quality : int
     id : int
-    
+
 class Model(BaseModel):
     parameters : str
     metrics : str
@@ -52,15 +52,15 @@ async def read_root(request: Request):
 
 @app.post("/api/predict")
 def predict_grade(wine: Wine):
-    return 0 #GRADE PREDICTED
+    return 0  # GRADE PREDICTED
 
 @app.get("/api/predict")
 def get_perfect_wine() :
-    return Wine #In type WINE
+    return Wine  # In type WINE
 
 @app.get("/api/model")
 def get_serialized():
-    return model #Euhh idk
+    return model  # Euhh idk
 
 @app.get("/api/model/description")
 def get_model_info():
@@ -68,9 +68,9 @@ def get_model_info():
 
 @app.put("/api/model")
 def add_entry(wine: Wine):
-    #Add the wine to the catalog
+    # Add the wine to the catalog
     wine
-    
+
 @app.post("/api/model/retrain")
 def retrain_model():
     doTheThingWithModelPy
