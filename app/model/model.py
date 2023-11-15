@@ -5,31 +5,43 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import RandomizedSearchCV
 
-data = pd.read_csv("data.csv")
+class Model:
 
-features = data.drop(["quality", "Id"], axis=1)
-target = data["quality"]
+    def __init__(self, data_path):
+        self.data = pd.read_csv("data.csv")
+        features = self.data.drop(["quality", "Id"], axis=1)
+        target = self.data["quality"]
+        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+        self.scaler = StandardScaler()
+        X_train_scaled = self.scaler.fit_transform(X_train)
+        # X_test_scaled = self.scaler.transform(X_test)
 
-X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+        self.model = models.Sequential([
+            layers.Dense(32, activation='relu', input_shape=(X_train_scaled.shape[1],)),
+            layers.Dense(10),
+            layers.Dense(1)  # Output layer for regression task
+        ])
 
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+        # Compile the model
+        self.model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 
-model = models.Sequential([
-    layers.Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(1)  # Output layer for regression task
-])
+    def train(self, X_train, y_train):
+        X_train_scaled = self.scaler.transform(X_train)
+        # Train the model
+        history = self.model.fit(X_train_scaled, y_train, epochs=50, batch_size=2, validation_split=0.2)
+        y_pred = self.model.predict(X_train_scaled)
+        mse = mean_squared_error(y_train, y_pred)
+        return mse
 
-# Compile the model
-model.compile(optimizer='adam', loss='mean_squared_error')
+    def save(self, path):
+        self.model.save(path)
 
-# Train the model
-model.fit(X_train_scaled, y_train, epochs=10, batch_size=32, validation_split=0.2)
+    def load(self, path):
+        self.model = tf.keras.models.load_model(path)
 
-# Evaluate on the test set
-y_pred = model.predict(X_test_scaled)
-mse = mean_squared_error(y_test, y_pred)
-print(f'Mean Squared Error on Test Set: {mse}')
+    def predict(self, wine):
+        # behold the magic
+        print(wine)
+        return self.model.predict(np.array([wine]))
