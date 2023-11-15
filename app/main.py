@@ -4,7 +4,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from typing import Annotated, Union, Dict
+from typing import Annotated, Union, Dict, Optional, List
 from pydantic import BaseModel
 from pymongo import MongoClient
 from uuid import uuid4, UUID
@@ -35,8 +35,7 @@ class Wine(BaseModel):
     ph : float
     sulphates : float
     alcohol : float
-    quality : int
-    id : int
+    quality : Optional[float] = None
 
 
 MODEL = Model("model/data.csv")
@@ -48,8 +47,8 @@ async def read_root(request: Request):
     return templates.TemplateResponse("landing.html", {"request": request})
 
 @app.post("/api/predict")
-def predict_grade(wine: Wine):
-    return 0  # GRADE PREDICTED
+def predict_grade(wine: Wine) -> List[float]:
+    return MODEL.predict(wine)
 
 @app.get("/api/predict")
 def get_perfect_wine() :

@@ -43,9 +43,10 @@ class Model:
         self.model = tf.keras.models.load_model(path)
 
     def predict(self, wine):
-        # behold the magic
-        print(wine)
-        return self.model.predict(np.array([wine]))
+        df = pd.Series(json.loads(wine.json()))
+        values = df.drop("quality").array
+        res = self.model.predict(np.array([values]), verbose=0)[0]
+        return res
 
     def to_json(self):
         model_config = self.model.get_config()
